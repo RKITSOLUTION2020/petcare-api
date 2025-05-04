@@ -80,13 +80,14 @@ export const DeletePet = async (req, res) => {
 
 export const AdoptedPet = async (req, res) => {
   const { id } = req.params;
+  const isAdopted = req.query.adopt === 'true';
 
   try {
     const updatedPet = await Pets.findByIdAndUpdate(
       id,
       {
-        adopted: true,
-        adoption_date: new Date(),
+        adopted: isAdopted,
+        adoption_date: isAdopted ? new Date() : null,
       },
       { new: true }
     );
@@ -95,7 +96,10 @@ export const AdoptedPet = async (req, res) => {
       return res.status(404).json({ message: 'Pet not found' });
     }
 
-    res.json({ message: 'Pet adopted successfully', pet: updatedPet });
+    res.json({
+      message: `Pet ${isAdopted ? 'adopted' : 'unadopted'} successfully`,
+      pet: updatedPet,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
