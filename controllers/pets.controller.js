@@ -29,7 +29,11 @@ export const filterPetsByMood = async (req, res) => {
   const query = req.query.mood;
 
   try {
-    const pets = await Pets.find({ personality: query });
+    const pets =
+      query === 'All'
+        ? await Pets.find()
+        : await Pets.find({ personality: query });
+
     res.json(pets);
   } catch (err) {
     res.status(500).send('Server error');
