@@ -1,6 +1,7 @@
 import express, { urlencoded } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import cors from 'cors';
 import petsroute from './routes/pets.routes.js';
 import connectDB from './lib/db.js';
 
@@ -10,6 +11,8 @@ connectDB();
 
 //data understanding middleware
 app.use(express.json());
+
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // Swagger setup
